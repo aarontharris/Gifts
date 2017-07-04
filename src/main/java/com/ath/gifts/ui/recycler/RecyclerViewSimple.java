@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 public class RecyclerViewSimple extends RecyclerView {
     public RecyclerViewSimple( Context context, @Nullable AttributeSet attrs ) {
         super( context, attrs );
+        // setLayoutManager( new LinearLayoutManager( context ) );
     }
 
     public void setAdapter( RecyclerViewSimpleAdapter<?> adapter ) {
