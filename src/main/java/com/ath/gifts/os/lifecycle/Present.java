@@ -5,7 +5,16 @@ import android.content.Context;
 
 import com.ath.gifts.tools.Log;
 
-public class Present {
+import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+public class Present<DATA> {
+
+    public interface OnDataChangedListener<DATA> {
+        void onDataChanged( DATA data, Exception error );
+    }
+
+    private Collection<OnDataChangedListener<DATA>> mOnDataChangedListeners = new ConcurrentLinkedQueue<>();
 
     /**
      * @param context same context the View receives -- must be an activity.
@@ -23,6 +32,20 @@ public class Present {
             } );
         } else {
             throw new IllegalStateException( "Present requires an Activity Context" );
+        }
+    }
+
+    public void addDataListener( OnDataChangedListener<DATA> listener ) {
+        mOnDataChangedListeners.add( listener );
+    }
+
+    protected void notifyDataChanged( DATA data, Exception error ) {
+        for ( OnDataChangedListener<DATA> listener : mOnDataChangedListeners ) {
+            try {
+                listener.onDataChanged( data, error );
+            } catch ( Exception e ) {
+                Log.e( e );
+            }
         }
     }
 
