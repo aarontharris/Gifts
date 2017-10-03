@@ -19,7 +19,7 @@ public class Urls {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String toParamString( @NonNull Map<String, String> params ) throws UnsupportedEncodingException {
+    public static String toUrlString( @NonNull Map<String, String> params ) throws UnsupportedEncodingException {
         StringBuilder stringBuilder = new StringBuilder();
 
         TreeMap<String, String> sortedParams = null;
@@ -50,17 +50,22 @@ public class Urls {
     public Urls() {
     }
 
-    public String toParamString() throws UnsupportedEncodingException {
+    public String toUrlString() throws UnsupportedEncodingException {
         String paramString = "";
+        String base = this.base.toString();
         if ( params != null ) {
-            paramString = "?" + toParamString( params );
+            String qmark = "?";
+            if ( base.contains( "?" ) ) {
+                qmark = "";
+            }
+            paramString = qmark + toUrlString( params );
         }
-        return base.toString() + paramString;
+        return base + paramString;
     }
 
     @Override public String toString() {
         try {
-            return toParamString();
+            return toUrlString();
         } catch ( Exception e ) {
             return super.toString();
         }
